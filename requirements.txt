@@ -1,0 +1,3 @@
+requests
+send2trash
+reportlab

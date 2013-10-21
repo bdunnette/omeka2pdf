@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            p {page-break-after: always;}
+        </style>
+    </head>
+    <body>
+        {% for card in deck %}
+            <p id="front"><img src="{{ card.front.image }}"/></p>
+            <p id="back">
+                <strong>{{ card.title }}</strong><br/>
+                {{ card.back.text }}
+                <img src="{{ card.back.image }}"/>
+            </p>
+        {% endfor %}
+    </body>
+</html>
