@@ -37,7 +37,7 @@ def build_decks(api_endpoint):
     omeka_collections = requests.get(api_endpoint + "collections").json()
     for omeka_collection in omeka_collections[1:]:
         collection_name = omeka_collection['element_texts'][0]['text']
-        collection_filename = makeSafeFilename(collection_name).lower()
+        collection_filename = os.path.join(root_path, makeSafeFilename(collection_name).lower())
         collection_tag = re.sub('[^0-9a-zA-Z]+', '*', collection_name.split(":")[0].lower().strip())
         omeka_items = requests.get(omeka_collection['items']['url']).json()
         decks[collection_name] = {"items": omeka_items}
@@ -63,7 +63,7 @@ def build_decks(api_endpoint):
                         if not os.path.isfile(image_filename):
                             print "Downloading file %s" % item_file['filename']
                             file_image = urlretrieve(item_file['file_urls']['original'], image_filename)
-                        card['front']['image'] = image_filename
+                        card['front']['image'] = item_file['filename']
                         
                         # Look to see if there is a "_marked" version of this image
                         if "/" in item_file['original_filename']:
@@ -86,11 +86,15 @@ def build_decks(api_endpoint):
                 deck.append(card)
                 print deck
                         
-            print "Saving collection %s" % collection_name 
-            print "Exporting to %s.html" % collection_filename
-            collection_file = open(collection_filename, "w")
-            collection_file.write(template.render(deck=deck))
-            collection_file.close()
+            print "Generating HTML for %s" % collection_name
+            deck_html = template.render(deck=deck)
+            print "Writing HTML file"
+            collection_file_html = open(collection_filename + ".html", "w")
+            collection_file_html.write(deck_html)
+            collection_file_html.close()
+            print "Generating PDF"
+            HTML(collection_filename + ".html").write_pdf(collection_filename + ".pdf")
+            
             
 def main():
     try:

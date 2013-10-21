@@ -2,17 +2,30 @@
 <html>
     <head>
         <style>
-            p {page-break-after: always;}
+            body {
+                text-align:center;
+                font-family: sans-serif;
+            }
+            img {
+                padding:10px;
+            }
+            .page-break {
+                page-break-after: always;
+            }
         </style>
     </head>
     <body>
         {% for card in deck %}
-            <p id="front"><img src="{{ card.front.image }}"/></p>
-            <p id="back">
-                <strong>{{ card.title }}</strong><br/>
-                {{ card.back.text }}
+            <div id="front">
+                <img src="{{ card.front.image }}"/>
+            </div>
+            <div class="page-break"></div>
+            <div id="back">
+                <h3>{{ card.title }}</h3>
+                <p>{{ card.back.text }}</p>
                 <img src="{{ card.back.image }}"/>
-            </p>
+            </div>
+            <div class="page-break"></div>
         {% endfor %}
     </body>
 </html>
