@@ -1,14 +1,8 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.1/css/bootstrap.min.css">
         <style>
-            body {
-                text-align:center;
-                font-family: sans-serif;
-            }
-            img {
-                padding:10px;
-            }
             .page-break {
                 page-break-after: always;
             }
@@ -16,16 +10,24 @@
     </head>
     <body>
         {% for card in deck %}
+            <!-- Only add items with at least one image -->
+            {% if card.front.image %}
             <div id="front">
                 <img src="{{ card.front.image }}"/>
             </div>
-            <div class="page-break"></div>
-            <div id="back">
+            {% if card.back.image %}
+                <div class="page-break"></div>
+                <div id="back">
+                    <h3>{{ card.title }}</h3>
+                    <p>{{ card.back.text }}</p>
+                    <img src="{{ card.back.image }}"/>
+                </div>
+            {% else %}
                 <h3>{{ card.title }}</h3>
                 <p>{{ card.back.text }}</p>
-                <img src="{{ card.back.image }}"/>
-            </div>
+            {% endif %}
             <div class="page-break"></div>
+            {% endif %}
         {% endfor %}
     </body>
 </html>
